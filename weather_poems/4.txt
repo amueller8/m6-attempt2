@@ -1,14 +1,6 @@
 Rain
 Edward Thomas
 *
-
-LITERATURE
-A Short Analysis of Edward Thomas’s ‘Rain’
-By Dr Oliver Tearle
-
-Edward Thomas’s poem ‘Rain’ was written in 1916, while Thomas was fighting in the trenches. What follows is the poem, followed by a brief analysis of some of its language, motifs, and images.
-
-
 Rain, midnight rain, nothing but the wild rain
 On this bleak hut, and solitude, and me
 Remembering again that I shall die
@@ -18,6 +10,7 @@ Since I was born into this solitude.
 Blessed are the dead that the rain rains upon:
 But here I pray that none whom once I loved
 Is dying to-night or lying still awake
+
 Solitary, listening to the rain,
 Either in pain or thus in sympathy
 Helpless among the living and the dead,
