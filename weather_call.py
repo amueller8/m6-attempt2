@@ -70,29 +70,15 @@ class WeatherCall():
         elif 100 < temp <= 110:
             return -0.6
         else:
-            return -1
+            print(-1)
 
         #weather to sentiment later (add weather to top,)
+        weather_options= ["thunderstorm", "drizzle", "rain",
+            "snow", "clouds", "mist", "smoke","haze","dust","fog",
+            "sand", "ash", "squall", "tornado", "clear", "extreme"
+        ]
 
         
 
 #weather options:
-"""
-thunderstorm
-drizzle
-rain
-snow
-clouds
-mist
-smoke
-haze
-dust
-fog
-sand
-ash
-squall
-tornado
-clear
 
-extreme
-"""

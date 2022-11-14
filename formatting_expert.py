@@ -9,7 +9,7 @@ class FormattingExpert():
 
         avg_line_length = 0
         for line in poem.lines:
-            avg_line_length += len(line)
+            avg_line_length += len(line.tokens)
         avg_line_length /= len(poem.lines)
         
         return avg_line_length
