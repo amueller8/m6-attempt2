@@ -28,7 +28,10 @@ class Poem:
         "cloud", "bright", "light", "dark"
         ]
         top_3_nouns = self.w_ex.get_nouns(self)
-        self.title = " ".join(top_3_nouns)
+        if top_3_nouns:
+            self.title = " ".join(top_3_nouns)
+        else:
+            self.title = self.lines[0].input
 
     
     def analyze_sentiment(self):
