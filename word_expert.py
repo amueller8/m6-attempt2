@@ -12,7 +12,7 @@ class WordExpert:
         """
         synonyms = []
 
-        for syn in wordnet.synsets(word):
+        for syn in wordnet.synsets(str(word)):
             for l in syn.lemmas():
                 synonyms.append(l.name())
         
@@ -34,7 +34,6 @@ class WordExpert:
         for line in poem.lines:
             for t in range(len(line.tokens)):
                 token = line.tokens[t]
-                print("Token ", token, "Tag ", line.tags[t][1])
                 if line.tags[t][1] == "NN":
                     noun_tokens[token] = noun_tokens.get(token, 0) + 1
                 if line.tags[t][1] == "NNP":
@@ -43,10 +42,15 @@ class WordExpert:
         
         #most common nouns = 
         most_common = sorted(noun_tokens.items(), key=lambda x:x[1])
-        print(most_common)
-        return(most_common)
-        
+        #select up to 3 most common 
+        if len(most_common) >= 3:
+            return [most_common[-1][0], most_common[-2][0], most_common[-3][0] ]
+        elif len(most_common) == 2:
+            return [most_common[-1][0], most_common[-2][0] ]
+        else:
+            return most_common[-1][0]
+    
+    def possible_verb(self,word): 
+        #https://www.reddit.com/r/LanguageTechnology/comments/egh7jk/how_to_check_if_a_word_can_be_interpreted_as_a/
+        return 'v' in set(s.pos() for s in wordnet.synsets(word))
 
-
-
-        

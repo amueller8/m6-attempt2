@@ -17,6 +17,18 @@ class Poem:
         
         #self.nlp = spacy.load("en_core_web_sm")
         
+        self.api_weather_options = ["thunderstorm", "drizzle", "rain",
+            "snow", "clouds", "mist", "smoke","haze","dust","fog",
+            "sand", "ash", "squall", "tornado", "clear", "extreme"
+        ]
+        self.other_weather_options = ["sunshine", "sunny", "foggy", "misty",
+        "snowy", "cloudy", "drizzling", "raining", "pouring", "downpour",
+        "smoky", "hazy", "windy", "wind", "stormy", "thunder", "thundering",
+        "lightning", "hurricane", "tornado", "storms", "showers", "sun", 
+        "cloud", "bright", "light", "dark"
+        ]
+        top_3_nouns = self.w_ex.get_nouns(self)
+        self.title = " ".join(top_3_nouns)
 
     
     def analyze_sentiment(self):
@@ -36,25 +48,21 @@ class Poem:
         """
         Determines fitness based on target mood and weather.
         """
-        #print("GETFITNESS: ", weather[1], "\n")
-        
-        #sentiment fitness-- smaller is better
         sent_fitness = abs(self.sentiment - target)
         #weather fitness
         #count weather related words in text, including the word itself
-        
-        synonyms = self.w_ex.get_synonyms(str(weather))
-        synonyms.append(str(weather))
+        weather1= weather[1].lower()
+        synonyms = self.w_ex.get_synonyms(weather1)
+        synonyms.append(weather1)
         weather_words = 0
-        for word in self.text:
-            if word in synonyms:
+        for word in self.text.split():
+            word = word.lower()
+            if word in synonyms or word in self.api_weather_options or \
+                word in self.other_weather_options:
                 weather_words += 1
             #make a list of weather words (like the options from API)
             #including sun, sunshine, etc
-        
-        print("weather words", weather_words)
-        
-    
+ 
         #composite fitness: we will subtract sentiment scores from 1, 
         #so smaller --> bigger
         sent_decimal = 1 - sent_fitness
@@ -79,8 +87,8 @@ class Poem:
                 combined_fitness /= (1 - (avg_line_length / 100)) 
 
         if not hasattr(self, 'fitness'):
-            self.fitness = combined_fitness
-        return combined_fitness 
+            self.fitness = combined_fitness * 10
+        return combined_fitness * 10
 
     def update_fitness(self, target, weather):
         self.fitness = self.get_fitness(target, weather)

@@ -14,6 +14,10 @@ class WeatherCall():
 
     def __init__(self):
         self.key = API_Key().get_key()
+        self.weather_options = ["thunderstorm", "drizzle", "rain",
+            "snow", "clouds", "mist", "smoke","haze","dust","fog",
+            "sand", "ash", "squall", "tornado", "clear", "extreme"
+        ]
 
     def query_city_for_weather(self,city, state=""):
         if state != "":
@@ -79,6 +83,4 @@ class WeatherCall():
         ]
 
         
-
-#weather options:
 

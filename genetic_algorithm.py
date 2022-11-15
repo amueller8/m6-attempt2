@@ -5,6 +5,9 @@ from poem import Poem
 from line import Line
 import random
 import glob
+import nltk
+from nltk.tokenize import word_tokenize
+import mlconjug3
 
 class GeneticAlgorithm:
 
@@ -13,19 +16,23 @@ class GeneticAlgorithm:
         self.iterations = iterations
         self.inspiring_set = []
         
-        weather_call = WeatherCall()
+        
+        self.weather_call = WeatherCall()
         if state_name != "":
-            weather = weather_call.query_city_for_weather(city_name,\
+            weather = self.weather_call.query_city_for_weather(city_name,\
                 state_name)
         else:
-            weather = weather_call.query_city_for_weather(city=city_name)
+            weather = self.weather_call.query_city_for_weather(city=city_name)
         
         self.weather = weather
-        self.target_mood = weather_call.determine_weather_sentiment(weather)
+        self.target_mood = \
+            self.weather_call.determine_weather_sentiment(weather)
         for filename in glob.glob("weather_poems/*.txt"):
             lines = self.process_poem_file(filename)
             poem = Poem(lines[3:])
             self.inspiring_set.append(poem)
+        
+        self.conjugator = mlconjug3.Conjugator(language='en')
                           
     def process_poem_file(self,file):
         lines = []
@@ -118,10 +125,10 @@ class GeneticAlgorithm:
                 old_fitness = poem.get_fitness(self.target_mood, self.weather)
                 probability = random.randint(0, 100)
                 if probability < 80:
-                    mutation_choice = random.randint(1, 3)
+                    mutation_choice = random.randint(1, 4)
                    
                     if mutation_choice == 1:
-                        #mutate synonyms
+                        #mutate synonyms, random
                         print(1)
                         #self.mutate_ingredient_name(rec)
                     elif mutation_choice == 2:
@@ -148,13 +155,98 @@ class GeneticAlgorithm:
             self.inspiring_set.sort(key=lambda x: x.fitness)
             #self.inspiring_set = new_gen
             print("ITERATION: " + str(num_iteration + 1) +
-                "\nFittest poem:\n" + str(self.inspiring_set[-1]) +
+                "\nFittest poem title:\n" +  str(self.inspiring_set[-1].title) +
+                "\nPoem: " +
+                str(self.inspiring_set[-1]) +
                 "\nFitness: " + \
                 str(self.inspiring_set[-1].get_fitness(self.target_mood,\
                      self.weather)))
             #print(self.recipes[-1])
             num_iteration += 1
 
+    def mutate_synonym_noun(self,poem):
+        noun = random.choice(poem.title.split(" "))
+        syns = poem.w_ex.get_synonyms(noun)
+
+        #choose a random word??
+        syn = random.choice(syns)
+        syn_pos = nltk.pos_tag(nltk.word_tokenize(syn))
+
+        #find noun in all places, sub in system
+        for line in poem.lines:
+            for token in line.tokens:
+                if token == noun:
+                    token_index = line.tokens.index(token)
+                    line.tags[token_index] = syn_pos
+                    line.tokens[token_index] = syn
+                    
+                    line.update_text(noun, syn)
+        
+        #$update poem fitness, text
+        poem.update_fitness(self.target_mood, self.weather)
+        poem.update_poem_text()
+    
+    def mutate_synonym_verb(self, poem):
+        for line in poem.lines:
+            tags = []
+            for t in line.tags:
+                print("T:",t)
+                tags.append(t[1])
+
+            print(line.tags)
+            #find "VBP" or "VB"  in tags
+            try:
+                tag_index = tags.index("VBP")
+            except ValueError:
+                tag_index = -1
+            try:
+                tag_index2 = tags.index("VBZ")
+            except ValueError:
+                tag_index2 = -1
+            try:
+                tag_index3 = tags.index("VBD")
+            except ValueError:
+                tag_index3 = -1
+
+            
+
+            if tag_index != -1 :
+                verbs = poem.w_ex.get_synonyms(line.tags[tag_index][0])
+                iters = 0
+                while iters < len(verbs):
+                    verb = random.choice(verbs)
+                    if poem.w_ex.possible_verb(verb):
+                        break
+                    iters += 1
+                print(verb)
+                vbp = self.conjugator.conjugate(verb).conjug_info["indicative"]["indicative present"]["1p"]
+                print(vbp)
+            if tag_index3 != -1:
+                verbs2 = poem.w_ex.get_synonyms(line.tags[tag_index3][0])
+                iters = 0
+                while iters < len(verbs2):
+                    verb2 = random.choice(verbs2)
+                    if poem.w_ex.possible_verb(verb2):
+                        break
+                    iters += 1
+                print(verb2)
+                vbd = self.conjugator.conjugate(verb2).conjug_info["indicative"]["indicative past tense"]["1p"]
+                print(vbd)
+            if tag_index2 != -1:
+                verbs3 = poem.w_ex.get_synonyms(line.tags[tag_index2][0])
+                iters = 0
+                while iters < len(verbs3):
+                    verb3 = random.choice(verbs3)
+                    if poem.w_ex.possible_verb(verb3):
+                        break
+                    iters += 1
+
+                print(verb3)
+                vbz = self.conjugator.conjugate(verb3).conjug_info["indicative"]["indicative present"]["3p"]
+                print(vbz)
+
+        
+    
 
 
 def main():
@@ -166,6 +258,13 @@ def main():
     print(x)
     print(x.get_fitness(ga.target_mood, ga.weather))
     print(x.fitness)
+    #print(x.w_ex.get_nouns(x))
+    #print(ga.mutate_synonym_noun(x))
+    print(x)
+    print(ga.mutate_synonym_verb(x))
+    print(ga.mutate_synonym_verb(x))
+    print(ga.mutate_synonym_verb(x))
+    #title can be 
     #w = WordExpert()
     #print(w.get_nouns(x))
     #ga.run()
