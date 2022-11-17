@@ -25,7 +25,8 @@ class Poem:
         "snowy", "cloudy", "drizzling", "raining", "pouring", "downpour",
         "smoky", "hazy", "windy", "wind", "stormy", "thunder", "thundering",
         "lightning", "hurricane", "tornado", "storms", "showers", "sun", 
-        "cloud", "bright", "light", "dark"
+        "cloud", "bright", "light", "dark", "breeze", "freeze", "ice", "icy",
+        "darkness"
         ]
         top_3_nouns = self.w_ex.get_nouns(self)
         if top_3_nouns:

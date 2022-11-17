@@ -114,6 +114,7 @@ class GeneticAlgorithm:
         """
         num_iteration = 0
         
+        fittest_poem = self.inspiring_set[-1]
         # Start iterations
         while num_iteration < self.iterations:
             for poem in self.inspiring_set:
@@ -139,6 +140,8 @@ class GeneticAlgorithm:
                         print(2)
                         #self.mutate_add_recipe_ingredient(rec)
                     elif mutation_choice == 3:
+                        poem.f_ex.change_poem_line_length(poem, \
+                            self.target, self.weather)
                         print(3)
                         #mutate line length or form?
                         #self.mutate_remove_recipe_ingredient(rec)
@@ -158,6 +161,7 @@ class GeneticAlgorithm:
             # Iteration print statements
             self.inspiring_set.sort(key=lambda x: x.fitness)
             #self.inspiring_set = new_gen
+            fittest_poem = self.inspiring_set[-1]
             print("ITERATION: " + str(num_iteration + 1) +
                 "\nFittest poem title:\n" +  str(self.inspiring_set[-1].title) +
                 "\nPoem: " +
@@ -167,6 +171,10 @@ class GeneticAlgorithm:
                      self.weather)))
             #print(self.recipes[-1])
             num_iteration += 1
+        
+        #save fittest poem to be reperformed!! (see p1)
+        
+
 
     def mutate_synonym_noun(self,poem):
         if poem.title != "":
