@@ -49,15 +49,19 @@ class FormattingExpert():
             
             for i in range(0,len(original_lines),2):
                 chop_factor = random.random()
-                if len(original_lines[i].tokens) <= 5:
-                    if len(original_lines[i+1]) <= 5 and \
-                        chop_factor > chop_threshold:
-                        new_line = self.join_lines(original_lines[i] + \
-                            original_lines[i+1])
-                        new_lines.append(new_line)
-                else:
+                try:
+                    if len(original_lines[i].tokens) <= 5:
+                        if len(original_lines[i+1].tokens) <= 5 and \
+                            chop_factor > chop_threshold:
+                            new_line = self.join_lines(original_lines[i],
+                                original_lines[i+1])
+                            new_lines.append(new_line)
+                    else:
+                        new_lines.append(original_lines[i])
+                        new_lines.append(original_lines[i+1])
+                except IndexError:
                     new_lines.append(original_lines[i])
-                    new_lines.append(original_lines[i+1])
+                    #new_lines.append(original_lines[i+1])
         
             poem.lines = new_lines
 
@@ -81,10 +85,10 @@ class FormattingExpert():
         text1 = line1.input
         text2 = line2.input
 
-        if line1.strip()[-1] in ",.!?":
-            new_line = Line(text1 + " " + text2)
+        if line1.input.strip()[-1] in ",.!?":
+            new_line = Line(text1.strip()+ " " + text2.strip())
         else:
-            new_line = Line(text1 + ", " + text2)
+            new_line = Line(text1.strip() + ", " + text2.strip())
         
         return new_line
 

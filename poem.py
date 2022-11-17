@@ -3,6 +3,7 @@ from nltk.sentiment import SentimentIntensityAnalyzer
 from nltk.corpus import wordnet
 from word_expert import WordExpert
 from formatting_expert import FormattingExpert 
+from line import Line
 
 class Poem:
     def __init__(self, lines):
@@ -28,10 +29,14 @@ class Poem:
         "cloud", "bright", "light", "dark", "breeze", "freeze", "ice", "icy",
         "darkness"
         ]
+
         top_3_nouns = self.w_ex.get_nouns(self)
-        if top_3_nouns:
-            self.title = " ".join(top_3_nouns)
-        else:
+        try:
+            if len(top_3_nouns) >= 2 :
+                self.title = " ".join(top_3_nouns)
+            else:
+                self.title = self.lines[0].input
+        except TypeError:
             self.title = self.lines[0].input
 
     
@@ -64,6 +69,7 @@ class Poem:
             if word in synonyms or word in self.api_weather_options or \
                 word in self.other_weather_options:
                 weather_words += 1
+                #may make the boost for a weather word much bigger like 5
             #make a list of weather words (like the options from API)
             #including sun, sunshine, etc
  
@@ -94,6 +100,24 @@ class Poem:
             self.fitness = combined_fitness * 10
         return combined_fitness * 10
 
+    def fittest_lines(self, num_lines=5):
+        top_5 = {}
+        for l in range(len(self.lines)):
+            p = Poem([self.lines[l]])
+            p.get_fitness(0.5, [44.5, "Clouds"])
+            print(p.fitness)
+            top_5[l] = p.fitness
+        sort_list = (sorted(top_5.items(), key=lambda item: item[1]))
+        print("hi")
+        print(sort_list)
+
+        if len(sort_list) >= num_lines:
+            new_list = sort_list[-num_lines:]
+            return list(dict(new_list).keys())
+
+        return list(sort_list.keys())
+
+
     def update_fitness(self, target, weather):
         self.fitness = self.get_fitness(target, weather)
     
@@ -102,3 +126,24 @@ class Poem:
         
     def __repr__(self):
         return "Poem({0})".format(self.lines)
+
+def main():
+    l = Line("Roses are terrible")
+    l2 = Line("Violets are awful and blue")
+    l3 = Line("Sugar is blown away in rain")
+    l4 = Line("And so are")
+    l5 = Line("choppy choppy yay the storm hurricane wind")
+    l6 = Line("Thank you, thank you, unpaid labor")
+
+    p = Poem([l,l2,l3,l4,l5, l6])
+    print(p.fittest_lines())
+
+    new_poem = []
+    #can work on this 
+    for line in reversed(sorted(p.fittest_lines())):
+        new_poem.append(p.lines[line])
+    
+    np = Poem(new_poem)
+    print(np)
+
+main()

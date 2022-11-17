@@ -127,7 +127,7 @@ class GeneticAlgorithm:
                 old_fitness = poem.get_fitness(self.target_mood, self.weather)
                 probability = random.randint(0, 100)
                 if probability < 80:
-                    mutation_choice = random.randint(1, 2)
+                    mutation_choice = random.randint(1, 3)
                    
                     if mutation_choice == 1:
                         #mutate synonyms, random
@@ -141,7 +141,7 @@ class GeneticAlgorithm:
                         #self.mutate_add_recipe_ingredient(rec)
                     elif mutation_choice == 3:
                         poem.f_ex.change_poem_line_length(poem, \
-                            self.target, self.weather)
+                            self.target_mood, self.weather)
                         print(3)
                         #mutate line length or form?
                         #self.mutate_remove_recipe_ingredient(rec)
@@ -157,7 +157,7 @@ class GeneticAlgorithm:
             new_gen = self.inspiring_set[(len(self.inspiring_set) // 2):]+ \
                             original_list[(len(original_list) // 2):]
             self.inspiring_set = new_gen
-            print("NEWGEN", new_gen)
+            #"NEWGEN", new_gen)
             # Iteration print statements
             self.inspiring_set.sort(key=lambda x: x.fitness)
             #self.inspiring_set = new_gen
@@ -220,14 +220,11 @@ class GeneticAlgorithm:
         options = {}
         for line in poem.lines:
             options[l] = []
-            #print("LINE NUM", l,"\n")
             tags = []
             for t in line.tags:
-                #print("T:",t)
                 if len(t) >= 2:
                     tags.append(t[1])
 
-            #print(line.tags)
             #find "VBP" or "VB"  in tags
             try:
                 tag_index = tags.index("VBP")
@@ -249,10 +246,8 @@ class GeneticAlgorithm:
                 while iters < len(verbs):
                     verb = random.choice(verbs)
                     if poem.w_ex.possible_verb(verb):
-                        #print(verb)
                         vbp = self.conjugator.conjugate(verb).conjug_info["indicative"]["indicative present"]["1p"]
                         options[l] = [verb, vbp, "VBP"]
-                        #print(vbp)
                         break
                     iters += 1
                 
@@ -262,10 +257,8 @@ class GeneticAlgorithm:
                 while iters < len(verbs2):
                     verb2 = random.choice(verbs2)
                     if poem.w_ex.possible_verb(verb2):
-                        #print(verb2)
                         vbd = self.conjugator.conjugate(verb2).conjug_info["indicative"]["indicative past tense"]["1p"]
                         options[l] = [verb2, vbd, "VBD"]
-                        #print(vbd)
                         break
                     iters += 1
                
@@ -275,10 +268,8 @@ class GeneticAlgorithm:
                 while iters < len(verbs3):
                     verb3 = random.choice(verbs3)
                     if poem.w_ex.possible_verb(verb3):
-                        #rint(verb3)
                         vbz = self.conjugator.conjugate(verb3).conjug_info["indicative"]["indicative present"]["3p"]
                         options[l] = [verb3, vbz, "VBZ"]
-                        #print(vbz)
                         break
                     iters += 1
             
@@ -287,8 +278,6 @@ class GeneticAlgorithm:
         return options
     
     def mutate_synonym_verbs(self, poem, options):
-        #print(options)
-        
         valid_options = []
         for k,v in options.items():
             if v != []:
@@ -298,9 +287,6 @@ class GeneticAlgorithm:
         
         if valid_options:
             verb = random.choice(valid_options)
-
-            print("VERB CHOICE", verb)
-
             line_index = verb[0]
             og_verb = verb[1][0]
             sub_verb = verb[1][1]
@@ -325,24 +311,13 @@ class GeneticAlgorithm:
 
 
 def main():
-    ga = GeneticAlgorithm(50, "Boston")
-    print("Target mood for Boston is ",ga.target_mood, ga.weather)
+    ga = GeneticAlgorithm(50, "Dallas")
+    print("Target mood for Dallas is ",ga.target_mood, ga.weather)
     print(ga.weather)
     #print(ga.inspiring_set)
     x = random.choice(ga.inspiring_set)
-    #print(x)
-    #print(x.get_fitness(ga.target_mood, ga.weather))
-    #print(x.fitness)
-    #print(x.w_ex.get_nouns(x))
-    #print(ga.mutate_synonym_noun(x))
-    #print(x)
-    #print(ga.mutate_synonym_verbs(x))
+    
     print(ga.run())
-    #print(ga.mutate_synonym_verb(x))
-    #print(ga.mutate_synonym_verb(x))
-    #title can be 
-    #w = WordExpert()
-    #print(w.get_nouns(x))
-    #ga.run()
+    
 
 main()
