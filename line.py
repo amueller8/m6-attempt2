@@ -39,11 +39,16 @@ class Line:
         self.input = self.input[0:start] + new_w_str + self.input[start+len(old_word):]
     
     def count_syllables_in_line(self):
+        num_syllables = 0
+        for word in self.tokens:
+            pronunciation_list = pronouncing.phones_for_word(word)
+            #for now just picking first of list 
+            if pronunciation_list:
+                num_syllables += pronouncing.syllable_count(pronunciation_list[0])
+            else:
+                num_syllables += 0
         
-        phones = [pronouncing.phones_for_word(p)[0] \
-            for p in self.input.split()]
-        num_syll = sum([pronouncing.syllable_count(p) for p in phones])
-        return num_syll
+        return num_syllables
 
     def get_input(self):
         return self.input

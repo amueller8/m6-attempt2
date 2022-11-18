@@ -28,25 +28,36 @@ class FormattingExpert():
             if current_syllables > 6:
                 #which to chop
                 line1, line2 = self.split_line_in_half(line)
+        
+                if line1.count_syllables_in_line() > 6:
+                    return self.change_line_syllables(line1, True)
+                elif line2.count_syllables_in_line() > 6:
+                    return self.change_line_syllables(line2, True)
+
                 #find closest difference to 6
                 if abs(line1.count_syllables_in_line() - 6) < \
                 abs(line2.count_syllables_in_line() - 6):
-                    return line1
+                    return self.make_six_syllables(line)
                 else:
-                    return line2
+                    return self.make_six_syllables(line)
+            else:
+
+                return self.make_six_syllables(line)
+
 
     def make_six_syllables(self, line):
         sylls = line.count_syllables_in_line()
         if sylls < 6:
             diff = abs(sylls - 6)
             #find a synonym
-            noun = self.word_ex.get_nouns(line)
+            noun = self.word_ex.get_nouns_line(line)
             old = ""
             choice = ""
-            if type(noun) == None:
+            print(type(noun), "type noun")
+            if noun is None:
                 word = random.choice(line.input.strip().split(" "))
                 old = word
-                sub_word = random.choice(self.word_ex.get_antonyms(word), \
+                sub_word = random.choice(self.word_ex.get_antonyms(word) + \
                     self.word_ex.get_synonyms(word))
                 for word in sub_word:
                     pronounce = pronouncing.phones_for_word(word)
@@ -67,8 +78,11 @@ class FormattingExpert():
                         if sylls == diff:
                             choice = word
                             break
+
             line.update_text(old, choice)
+            print("MAKE SIX SYLLS???",line)
             return line
+
 
     
     def change_poem_line_length(self, poem, target, weather):
@@ -124,12 +138,14 @@ class FormattingExpert():
 
     def split_line_in_half(self, line):
         og_line = line
-        words = og_line.input.split(" ")
+        words = og_line.input.strip().split(" ")
         
         part_1 = words[0:len(words)//2]
+        part_1 = " ".join(part_1)
 
         part_2 = words[(len(words)//2):]
-
+        part_2 = " ".join(part_2)
+        print(part_1, part_2)
         return Line(part_1), Line(part_2)
         """
         negative sentiment target -> short, choppy

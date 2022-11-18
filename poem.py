@@ -144,6 +144,16 @@ def main():
         new_poem.append(p.lines[line])
     
     np = Poem(new_poem)
+    new_2 = []
+    for line in np.lines:
+        print(line.count_syllables_in_line())
+        newline = np.f_ex.change_line_syllables(line, True)
+        print(newline)
+        new_2.append(newline)
+    
     print(np)
+    print(new_2)
+    n = Poem(new_2)
+    print(n)
 
 main()
