@@ -11,6 +11,7 @@ class Line:
         self.tags = nltk.pos_tag(self.tokens)
         self.syllables = self.count_syllables_in_line
 
+    """
     def count_syllables_in_line(self):
         num_syllables = 0
         for word in self.tokens:
@@ -22,6 +23,8 @@ class Line:
                 num_syllables += 0
         
         return num_syllables
+    """
+
     def update_text(self, old_word, new_word):
         #if new word has _, change it
         start = self.input.find(old_word)
@@ -35,6 +38,13 @@ class Line:
 
         self.input = self.input[0:start] + new_w_str + self.input[start+len(old_word):]
     
+    def count_syllables_in_line(self):
+        
+        phones = [pronouncing.phones_for_word(p)[0] \
+            for p in self.input.split()]
+        num_syll = sum([pronouncing.syllable_count(p) for p in phones])
+        return num_syll
+
     def get_input(self):
         return self.input
     

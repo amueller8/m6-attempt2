@@ -1,10 +1,13 @@
 import random
 from line import Line
+from word_expert import WordExpert 
+import pronouncing
 
 class FormattingExpert():
 
     def __init__(self):
        self.name = "Expert :)"
+       self.word_ex = WordExpert()
     
     def get_avg_line_length(self, poem):
 
@@ -14,6 +17,59 @@ class FormattingExpert():
         avg_line_length /= len(poem.lines)
         
         return avg_line_length
+    
+
+    
+        
+        return num_syllables
+    def change_line_syllables(self, line, six):
+        current_syllables = line.count_syllables_in_line()
+        if six:
+            if current_syllables > 6:
+                #which to chop
+                line1, line2 = self.split_line_in_half(line)
+                #find closest difference to 6
+                if abs(line1.count_syllables_in_line() - 6) < \
+                abs(line2.count_syllables_in_line() - 6):
+                    return line1
+                else:
+                    return line2
+
+    def make_six_syllables(self, line):
+        sylls = line.count_syllables_in_line()
+        if sylls < 6:
+            diff = abs(sylls - 6)
+            #find a synonym
+            noun = self.word_ex.get_nouns(line)
+            old = ""
+            choice = ""
+            if type(noun) == None:
+                word = random.choice(line.input.strip().split(" "))
+                old = word
+                sub_word = random.choice(self.word_ex.get_antonyms(word), \
+                    self.word_ex.get_synonyms(word))
+                for word in sub_word:
+                    pronounce = pronouncing.phones_for_word(word)
+                    if pronounce:
+                        sylls = pronouncing.syllable_count(pronounce[0])
+                        if sylls == diff:
+                            choice = word
+                            break
+            else:
+                word = random.choice(noun)
+                old = word
+                sub_word = random.choice(self.word_ex.get_antonyms(word), \
+                    self.word_ex.get_synonyms(word))
+                for word in sub_word:
+                    pronounce = pronouncing.phones_for_word(word)
+                    if pronounce:
+                        sylls = pronouncing.syllable_count(pronounce[0])
+                        if sylls == diff:
+                            choice = word
+                            break
+            line.update_text(old, choice)
+            return line
+
     
     def change_poem_line_length(self, poem, target, weather):
         """
@@ -69,7 +125,9 @@ class FormattingExpert():
     def split_line_in_half(self, line):
         og_line = line
         words = og_line.input.split(" ")
+        
         part_1 = words[0:len(words)//2]
+
         part_2 = words[(len(words)//2):]
 
         return Line(part_1), Line(part_2)
