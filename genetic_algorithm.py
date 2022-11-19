@@ -126,8 +126,8 @@ class GeneticAlgorithm:
             for poem in self.inspiring_set:
                 old_fitness = poem.get_fitness(self.target_mood, self.weather)
                 probability = random.randint(0, 100)
-                if probability < 80:
-                    mutation_choice = random.randint(1, 3)
+                if probability < 60:
+                    mutation_choice = random.randint(1, 2)
                    
                     if mutation_choice == 1:
                         #mutate synonyms, random
@@ -138,10 +138,10 @@ class GeneticAlgorithm:
                         options = self.find_synonym_verb(poem)
                         self.mutate_synonym_verbs(poem, options)
                         print(2)
-                        #self.mutate_add_recipe_ingredient(rec)
+                    
                     elif mutation_choice == 3:
-                        poem.f_ex.change_poem_line_length(poem, \
-                            self.target_mood, self.weather)
+                        poem.f_ex.change_poem_line_length_2(poem)
+                            #self.target_mood, self.weather)
                         print(3)
                         #mutate line length or form?
                         #self.mutate_remove_recipe_ingredient(rec)
@@ -169,6 +169,19 @@ class GeneticAlgorithm:
                 "\nFitness: " + \
                 str(self.inspiring_set[-1].get_fitness(self.target_mood,\
                      self.weather)))
+                     
+            best = fittest_poem.fittest_lines(self.target_mood, self.weather)
+            
+            five_poem = []
+            for p in best:
+                if len(five_poem) == 5:
+                    break
+                if fittest_poem.lines[p] not in five_poem:
+                    five_poem.append(fittest_poem.lines[p])
+
+            print(five_poem)
+                
+                #print("OTHER:", self.inspiring_set[-8].lines[p])
             #print(self.recipes[-1])
             num_iteration += 1
         
@@ -311,7 +324,7 @@ class GeneticAlgorithm:
 
 
 def main():
-    ga = GeneticAlgorithm(50, "Dallas")
+    ga = GeneticAlgorithm(20, "Dallas")
     print("Target mood for Dallas is ",ga.target_mood, ga.weather)
     print(ga.weather)
     #print(ga.inspiring_set)

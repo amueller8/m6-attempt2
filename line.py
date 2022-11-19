@@ -50,6 +50,18 @@ class Line:
         
         return num_syllables
 
+    def split_line_in_half(self):
+        og_line = self
+        words = og_line.input.strip().split(" ")
+        
+        part_1 = words[0:len(words)//2]
+        " ".join(part_1)
+
+        part_2 = words[(len(words)//2):]
+        " ".join(part_2)
+
+        return Line(part_1), Line(part_2)
+
     def get_input(self):
         return self.input
     

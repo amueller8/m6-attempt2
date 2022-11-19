@@ -81,41 +81,39 @@ class Poem:
         else: 
             combined_fitness = sent_decimal
 
-        #aesthetic: line length ("negative mood" -> choppier, shorter lines)
-        avg_line_length = self.f_ex.get_avg_line_length(self)
+        #aesthetic: targeting ~6 syllable lines
+        avg_syllables = self.f_ex.get_avg_line_length(self)
         
         #subtle rewards and punishment for line length 
-        if target < 0:
-            if avg_line_length <= 5:
-                combined_fitness *= (1 + (avg_line_length / 10))
-            else:
-                combined_fitness /= (1 - (avg_line_length / 100)) 
-        else:
-            if avg_line_length > 5:
-                combined_fitness *= (1 + (avg_line_length) / 10)
-            else:
-                combined_fitness /= (1 - (avg_line_length / 100)) 
+        if avg_syllables == 6:
+            combined_fitness *= (1 + avg_syllables/7 )
+        elif avg_syllables == 5 or avg_syllables == 7:
+            combined_fitness /= (1 + (avg_syllables) / 15)
+        elif avg_syllables < 5:
+            combined_fitness /= (1 - (avg_syllables / 80)) 
+        elif avg_syllables > 7:
+            combined_fitness /= (1 - (avg_syllables / 80)) 
 
         if not hasattr(self, 'fitness'):
             self.fitness = combined_fitness * 10
         return combined_fitness * 10
 
-    def fittest_lines(self, num_lines=5):
+    def fittest_lines(self, target_mood, weather, num_lines=5):
         top_5 = {}
         for l in range(len(self.lines)):
             p = Poem([self.lines[l]])
-            p.get_fitness(0.5, [44.5, "Clouds"])
+            p.get_fitness(target_mood, weather)
             print(p.fitness)
             top_5[l] = p.fitness
         sort_list = (sorted(top_5.items(), key=lambda item: item[1]))
         print("hi")
         print(sort_list)
 
-        if len(sort_list) >= num_lines:
-            new_list = sort_list[-num_lines:]
-            return list(dict(new_list).keys())
+        #if len(sort_list) >= num_lines:
+            #new_list = sort_list[-num_lines:]
+            #return list(dict(new_list).keys())
 
-        return list(sort_list.keys())
+        return list(dict(sort_list).keys())
 
 
     def update_fitness(self, target, weather):
@@ -156,4 +154,4 @@ def main():
     n = Poem(new_2)
     print(n)
 
-main()
+#main()

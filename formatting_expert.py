@@ -18,7 +18,16 @@ class FormattingExpert():
         
         return avg_line_length
     
+    def get_avg_syllables(self, poem):
+        
+        avg_syllables = 0
+        for line in poem.lines:
+            avg_syllables+= line.syllables
 
+        avg_syllables /= len(poem.lines)
+        
+        return avg_syllables
+    
     
         
         return num_syllables
@@ -44,6 +53,26 @@ class FormattingExpert():
 
                 return self.make_six_syllables(line)
 
+    def cut_to_six_sylls(self, line):
+        sylls = line.count_syllables_in_line()
+        if sylls > 6:
+            to_remove = sylls - 6
+            #try cutting in half??
+
+            line1, line2 = self.split_line_in_half(line)
+            sylls1 = line1.count_syllables_in_line()
+            sylls2 = line2.count_syllables_in_line()
+            print("OLD: ", line, " (sylls ", sylls,")\n NEW:",\
+                 line1, "\n", line2, "sylls: ", sylls1, sylls2)
+
+            #return closest
+            line1diff = abs(sylls1 - 6)
+            line2diff = abs(sylls2 - 6)
+            if line1diff <= line2diff:
+                return line1
+            else:
+                return line2
+            
 
     def make_six_syllables(self, line):
         sylls = line.count_syllables_in_line()
@@ -84,7 +113,14 @@ class FormattingExpert():
             return line
 
 
-    
+    def change_poem_line_length_2(self, poem):
+        #choose least fit line?? maybe later
+        line = random.choice(poem.lines)
+        new_line = self.change_line_length_2(line)
+        index = poem.lines.index(line)
+        poem.lines[index] = new_line
+
+        
     def change_poem_line_length(self, poem, target, weather):
         """
         Based on mood, alter poem line lengths (shorter for negative mood)
@@ -134,7 +170,23 @@ class FormattingExpert():
                     #new_lines.append(original_lines[i+1])
         
             poem.lines = new_lines
+    def change_line_length_2(self, line):
+        line1, line2 = self.split_line_in_half(line)
+        #pick closest to 6 syll
+        sylls1 = line1.count_syllables_in_line()
+        sylls2 = line2.count_syllables_in_line()
+        if abs(sylls1 - 6) == 0:
+            return line1
+        elif abs(sylls2 - 6) == 0:
+            return line2
+        else: #return closest to 6
+            if abs(sylls1 - 6) <  abs(sylls2 - 6):
+                return line1
+            else:
+                return line2
 
+        
+                        
 
     def split_line_in_half(self, line):
         og_line = line
@@ -167,3 +219,18 @@ class FormattingExpert():
         return new_line
 
 
+def main():
+    f = FormattingExpert()
+    l = Line("Roses are terrible")
+    l2 = Line("Violets are awful and blue")
+    l3 = Line("Sugar is blown away in rain")
+    l4 = Line("And so are")
+    l5 = Line("choppy choppy yay the storm hurricane wind")
+    l6 = Line("Thank you, thank you, unpaid labor")
+
+    p =  [l, l2, l3,l4,l5, l6]
+    for i in p:
+        line = f.cut_to_six_sylls(i)
+        print("FINAL LINE: ", line)
+
+#main()
