@@ -28,9 +28,7 @@ class FormattingExpert():
         
         return avg_syllables
     
-    
-        
-        return num_syllables
+
     def change_line_syllables(self, line, six):
         current_syllables = line.count_syllables_in_line()
         if six:
@@ -74,6 +72,7 @@ class FormattingExpert():
                 return line2
             
 
+   
     def make_six_syllables(self, line):
         sylls = line.count_syllables_in_line()
         if sylls < 6:
@@ -170,6 +169,7 @@ class FormattingExpert():
                     #new_lines.append(original_lines[i+1])
         
             poem.lines = new_lines
+
     def change_line_length_2(self, line):
         line1, line2 = self.split_line_in_half(line)
         #pick closest to 6 syll

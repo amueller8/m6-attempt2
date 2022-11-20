@@ -9,7 +9,7 @@ class Line:
         self.input = input
         self.tokens = nltk.word_tokenize(input)
         self.tags = nltk.pos_tag(self.tokens)
-        self.syllables = self.count_syllables_in_line
+        self.syllables = self.count_syllables_in_line()
 
     """
     def count_syllables_in_line(self):
@@ -36,7 +36,10 @@ class Line:
         else:
              new_w_str = new_word[0] + " "
 
-        self.input = self.input[0:start] + new_w_str + self.input[start+len(old_word):]
+        if new_word == "":
+            self.input[0:start] + self.input[start+len(old_word):]
+        else:
+            self.input = self.input[0:start] + new_w_str + self.input[start+len(old_word):]
     
     def count_syllables_in_line(self):
         num_syllables = 0
@@ -61,6 +64,10 @@ class Line:
         " ".join(part_2)
 
         return Line(part_1), Line(part_2)
+    
+    def remove_word(self, word):
+        new_line = self.input.replace(word, "")
+
 
     def get_input(self):
         return self.input

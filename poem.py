@@ -4,6 +4,7 @@ from nltk.corpus import wordnet
 from word_expert import WordExpert
 from formatting_expert import FormattingExpert 
 from line import Line
+import random
 
 class Poem:
     def __init__(self, lines):
@@ -103,7 +104,7 @@ class Poem:
         for l in range(len(self.lines)):
             p = Poem([self.lines[l]])
             p.get_fitness(target_mood, weather)
-            print(p.fitness)
+            #print(p.fitness)
             top_5[l] = p.fitness
         sort_list = (sorted(top_5.items(), key=lambda item: item[1]))
         print("hi")
@@ -125,6 +126,37 @@ class Poem:
     def __repr__(self):
         return "Poem({0})".format(self.lines)
 
+    def split_poem_in_pairs(self, target, weather):
+        linez = []
+        pairs = []
+        index = 0
+        for l in self.lines:
+            if l.count_syllables_in_line() >= 8:
+                l1, l2 = self.f_ex.split_line_in_half(l)
+                linez.append(l1)
+                linez.append(l2)
+                pairs.append(index)
+                pairs.append(index + 1)
+                index += 1
+            index += 1
+        
+        new_p = Poem(linez)
+        fitnesses = []
+        for i in range(len(new_p.lines)):
+            if i in pairs and i+1 in pairs and i+1 < len(new_p.lines):
+                g_fit = Poem([new_p.lines[i], new_p.lines[i+1]])
+                g_fit.get_fitness(target, weather)
+                fitnesses.append((g_fit.fitness, g_fit))
+                i += 1
+            else:
+                g_fit = Poem([new_p.lines[i]])
+                g_fit.get_fitness(target, weather)
+                fitnesses.append((g_fit.fitness, g_fit))
+        #print("POEM BY FITNESSES",fitnesses)
+        sort_list = (sorted(dict(fitnesses).items(), key=lambda item: item[0]))
+        #print("HERE IS SORTLIST\n",sort_list)
+        return sort_list
+
 def main():
     l = Line("Roses are terrible")
     l2 = Line("Violets are awful and blue")
@@ -134,24 +166,38 @@ def main():
     l6 = Line("Thank you, thank you, unpaid labor")
 
     p = Poem([l,l2,l3,l4,l5, l6])
-    print(p.fittest_lines())
+    #print(p.fittest_lines())
 
-    new_poem = []
-    #can work on this 
-    for line in reversed(sorted(p.fittest_lines())):
-        new_poem.append(p.lines[line])
+    linz = []
+    pairs = []
+    index = 0
+    for l in p.lines:
+        
+        if l.count_syllables_in_line() > 6:
+            l1, l2 = p.f_ex.split_line_in_half(l)
+            linz.append(l1)
+            linz.append(l2)
+            pairs.append(index)
+            pairs.append(index + 1)
+            index += 1
+        index += 1
+        
+    new_p = Poem(linz)
+    fitnesses = []
     
-    np = Poem(new_poem)
-    new_2 = []
-    for line in np.lines:
-        print(line.count_syllables_in_line())
-        newline = np.f_ex.change_line_syllables(line, True)
-        print(newline)
-        new_2.append(newline)
-    
-    print(np)
-    print(new_2)
-    n = Poem(new_2)
-    print(n)
+    for i in range(len(new_p.lines)):
+        if i in pairs and i+1 in pairs and i+1 < len(new_p.lines) and i < len(new_p.lines) :
+            g_fit = Poem([new_p.lines[i], new_p.lines[i+1]])
+            g_fit.get_fitness(0.6, [41.0, "Cloudy"])
+            fitnesses.append((g_fit.fitness, g_fit))
+            i += 1
+        else:
+            g_fit = Poem([new_p.lines[i]])
+            g_fit.get_fitness(0.6, [41.0, "Cloudy"])
+            fitnesses.append((g_fit.fitness, g_fit))
 
+    print(fitnesses)
+    print(new_p)
+    
+  
 #main()

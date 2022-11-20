@@ -8,6 +8,8 @@ import glob
 import nltk
 from nltk.tokenize import word_tokenize
 import mlconjug3
+import os
+from os.path import exists
 
 class GeneticAlgorithm:
 
@@ -139,16 +141,7 @@ class GeneticAlgorithm:
                         self.mutate_synonym_verbs(poem, options)
                         print(2)
                     
-                    elif mutation_choice == 3:
-                        poem.f_ex.change_poem_line_length_2(poem)
-                            #self.target_mood, self.weather)
-                        print(3)
-                        #mutate line length or form?
-                        #self.mutate_remove_recipe_ingredient(rec)
-
-                    #poem.update_fitness(self.target_mood, self.weather)
-                    
-                    
+                poem.update_poem_text()
                 poem.update_fitness(self.target_mood, self.weather)
 
             # Combining top 50% of new and original recipes
@@ -157,7 +150,7 @@ class GeneticAlgorithm:
             new_gen = self.inspiring_set[(len(self.inspiring_set) // 2):]+ \
                             original_list[(len(original_list) // 2):]
             self.inspiring_set = new_gen
-            #"NEWGEN", new_gen)
+        
             # Iteration print statements
             self.inspiring_set.sort(key=lambda x: x.fitness)
             #self.inspiring_set = new_gen
@@ -170,24 +163,52 @@ class GeneticAlgorithm:
                 str(self.inspiring_set[-1].get_fitness(self.target_mood,\
                      self.weather)))
                      
-            best = fittest_poem.fittest_lines(self.target_mood, self.weather)
+            split_best = fittest_poem.split_poem_in_pairs(self.target_mood,\
+                 self.weather)
             
-            five_poem = []
-            for p in best:
-                if len(five_poem) == 5:
+            #we need 5 LINES from split_best , so worst case 5 selections
+            split_best = reversed(split_best[-5:])
+            split_dict = dict(split_best)
+
+            final_poem_lines = []
+            lines_added = 0
+            for val in split_dict.values():
+                if lines_added >= 5:
                     break
-                if fittest_poem.lines[p] not in five_poem:
-                    five_poem.append(fittest_poem.lines[p])
+                if len(val.lines) == 2:
+                    final_poem_lines.append(val.lines[0])
+                    final_poem_lines.append(val.lines[1])
+                    lines_added += 2
+                    if lines_added == 5:
+                        break
+                else:
+                    final_poem_lines.append(val.lines[0])
+                    lines_added += 1
+                    if lines_added == 5:
+                        break
 
-            print(five_poem)
-                
-                #print("OTHER:", self.inspiring_set[-8].lines[p])
-            #print(self.recipes[-1])
+            final = Poem(final_poem_lines)
+            print("final\n", final)
+            if final.title:
+                print("titled")
+                #os stuff;\
+                # https://www.pythontutorial.net/python-basics/python-check-if-file-exists/
+                if os.path.exists("generated_poems/"+final.title + ".txt"):
+                    with open("generated_poems/"+final.title + \
+                        str(num_iteration) + ".txt", "w") as file:
+                        file.write(final.title + ":\n")
+                        file.write(final.text)
+                else:
+                    with open("generated_poems/"+final.title + ".txt", "w") \
+                        as file:
+                        file.write(final.title + ":\n")
+                        file.write(final.text)
+            else:
+                with open("generated_poems/poem" + \
+                    str(num_iteration) + ".txt", "w") as file:
+                    file.write(final.text)
+
             num_iteration += 1
-        
-        #save fittest poem to be reperformed!! (see p1)
-        
-
 
     def mutate_synonym_noun(self,poem):
         if poem.title != "":
@@ -323,14 +344,11 @@ class GeneticAlgorithm:
     
 
 
-def main():
-    ga = GeneticAlgorithm(20, "Dallas")
-    print("Target mood for Dallas is ",ga.target_mood, ga.weather)
-    print(ga.weather)
-    #print(ga.inspiring_set)
-    x = random.choice(ga.inspiring_set)
-    
-    print(ga.run())
+#def main():
+    #ga = GeneticAlgorithm(15, "Dallas")
+    #rint("Target mood for city is ",ga.target_mood, ga.weather
+     
+   #ga.run()
     
 
-main()
+#main()

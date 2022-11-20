@@ -85,4 +85,21 @@ class WordExpert:
     def possible_verb(self,word): 
         #https://www.reddit.com/r/LanguageTechnology/comments/egh7jk/how_to_check_if_a_word_can_be_interpreted_as_a/
         return ('v' in set(s.pos() for s in wordnet.synsets(word)) and "_" not in word)
+    
+
+    def find_adjectives_adverbs(self, line):
+
+        adj_adverb_tokens = []
+        for t in range(len(line.tokens)):
+            if len(line.tags[t]) < 2:
+                continue
+            token = line.tokens[t]
+            if line.tags[t][1] == "JJ" or line.tags[t][1] == "JJS" :
+                adj_adverb_tokens.append(token)
+            if line.tags[t][1] == "RB"  or line.tags[t][1] == "RBS":
+                adj_adverb_tokens.append(token)
+
+        return adj_adverb_tokens
+
+
 
