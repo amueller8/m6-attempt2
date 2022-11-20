@@ -37,10 +37,15 @@ def main():
             text += line + "\n"
 
     toSpeech = gTTS(text=text, lang=language, slow=False)
-    toSpeech.save("generated_poems/" + sorted_files[-answer] + ".mp3")
+    #compress
+    name_words = sorted_files[-answer].split()
+    name = "-".join(name_words)
+    toSpeech.save("generated_poems/" + name + ".mp3")
    
     #play
-    os.system("mpg321 generated_poems/" + sorted_files[-answer] + ".mp3")
+    poem = "generated_poems/" + name + ".mp3"
+    print(poem)
+    os.system("afplay " + poem )
   
 
 
