@@ -2,6 +2,17 @@ import matplotlib
 from matplotlib import pyplot as plt
 import random
 
+"""
+Name: Abby
+CSCI 3725
+M6 Poetry Slam
+11/20/22
+
+
+Analyzes fitness stats from poem and "final" flamenca-format version.
+Creates and saves matplotlib graphs to aid in determining ideal # generations.
+"""
+
 
 def analyze():
 

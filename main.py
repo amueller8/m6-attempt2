@@ -11,7 +11,8 @@ M6 Poetry Slam
 
 
 File creates and runs an instance of a genetic algorithm,
-then presents the top 3 most recent results 
+then presents the top 3 most recent results for user to pick from.
+Saves the file to an mp3 format and reads aloud.
 """
 
 def main():
@@ -58,9 +59,14 @@ def main():
     os.system("afplay " + poem )
   
 
-
     
 def sort_files():
+    """
+    Sorts the files bu when there were added to generated_poems to find
+    most recent.
+    return:
+    latest_files (creation time sorted list)
+    """
     list_of_files = glob.glob('generated_poems/*') 
     latest_files = sorted(list_of_files, key=os.path.getctime)
     return latest_files

@@ -3,14 +3,33 @@ from line import Line
 from word_expert import WordExpert 
 import pronouncing
 
+"""
+Name: Abby
+CSCI 3725
+M6 Poetry Slam
+11/20/22
+
+
+File creates a "formatting expert" class that handles knowledge about 
+average poem syllables, changing line syllables accordingly,
+splitting/joining and generally altering some format stuff
+(some stuff handled in poem too.s)
+"""
+
 class FormattingExpert():
+    """
+    File creates a "formatting expert" class that handles knowledge about 
+    syllables and changing poem line formatting to change # syllables.
+    """
 
     def __init__(self):
        self.name = "Expert :)"
        self.word_ex = WordExpert()
     
     def get_avg_line_length(self, poem):
-
+        """
+        Gets average words in poem. This is deprecated.
+        """
         avg_line_length = 0
         for line in poem.lines:
             avg_line_length += len(line.tokens)
@@ -19,7 +38,11 @@ class FormattingExpert():
         return avg_line_length
     
     def get_avg_syllables(self, poem):
-        
+        """
+        Counts average syllables in poem. Useful for fitness.
+        param: poem, Poem to be counted
+        return: avg_syllables int
+        """
         avg_syllables = 0
         for line in poem.lines:
             avg_syllables+= line.syllables
@@ -52,6 +75,11 @@ class FormattingExpert():
                 return self.make_six_syllables(line)
 
     def cut_to_six_sylls(self, line):
+        """
+        Reduces a line to 6 or fewer syllables (closest to 6 wins)
+        param: line to be cut to 6
+        return: new line
+        """
         sylls = line.count_syllables_in_line()
         if sylls > 6:
             to_remove = sylls - 6
@@ -71,9 +99,11 @@ class FormattingExpert():
             else:
                 return line2
             
-
    
     def make_six_syllables(self, line):
+        """
+        Another attempt to make a line 6 syllables. will probably delete
+        """
         sylls = line.count_syllables_in_line()
         if sylls < 6:
             diff = abs(sylls - 6)
