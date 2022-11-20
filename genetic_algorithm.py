@@ -10,13 +10,33 @@ from nltk.tokenize import word_tokenize
 import mlconjug3
 import os
 from os.path import exists
+import datetime
 
+"""
+Names: Abby (with some code used from PQ2 group project)
+CSCI 3725
+M6 Poetry Slam
+11/20/22
+
+
+File sets up a genetic algorithm to create
+weather inspired poems partly informed by the flamenca 
+spanish poetry style.
+"""
 class GeneticAlgorithm:
 
     def __init__(self, iterations, city_name, state_name=""):
+        """
+        Creates a genetic algorithm 
+        params
+            iterations (int): number of iterations
+            city_name (string): city for seed weather/mood
+            state_name (optional): to specify US state of city (XX format)
+        """
         
         self.iterations = iterations
         self.inspiring_set = []
+        self.stats = str(datetime.date.today())
         
         
         self.weather_call = WeatherCall()
@@ -29,6 +49,8 @@ class GeneticAlgorithm:
         self.weather = weather
         self.target_mood = \
             self.weather_call.determine_weather_sentiment(weather)
+        
+        #process files
         for filename in glob.glob("weather_poems/*.txt"):
             lines = self.process_poem_file(filename)
             poem = Poem(lines[3:])
@@ -51,8 +73,8 @@ class GeneticAlgorithm:
             
     def selection(self):
         """
-        Does selection.
-        Casting to int.
+        Selections poems proportionally to fitness.
+        returns the selections
         
         """
         selected_poems = []
@@ -67,7 +89,6 @@ class GeneticAlgorithm:
         for i in range(2 * len(self.inspiring_set)):
             count = 0
             random_number = random.randint(0,total)
-            #random_number = random.SystemRandom().uniform(0,total)
             for z in range(len(self.inspiring_set)):
                 count += int(self.inspiring_set[z].get_fitness(self.target_mood,\
                  self.weather))
@@ -113,9 +134,10 @@ class GeneticAlgorithm:
         The method that controls the entire overview of the GA process, running
         it the iterations of selection, recombination, and mutation, as well as
         printing useful information at the end of each iteration.
+
         """
         num_iteration = 0
-        
+
         fittest_poem = self.inspiring_set[-1]
         # Start iterations
         while num_iteration < self.iterations:
@@ -132,14 +154,12 @@ class GeneticAlgorithm:
                     mutation_choice = random.randint(1, 2)
                    
                     if mutation_choice == 1:
-                        #mutate synonyms, random
+                        #mutate synonyms, nouns
                         self.mutate_synonym_noun(poem)
-                        print(1)
-                        #self.mutate_ingredient_name(rec)
                     elif mutation_choice == 2:
+                        #put in verb synonyms
                         options = self.find_synonym_verb(poem)
                         self.mutate_synonym_verbs(poem, options)
-                        print(2)
                     
                 poem.update_poem_text()
                 poem.update_fitness(self.target_mood, self.weather)
@@ -155,17 +175,13 @@ class GeneticAlgorithm:
             self.inspiring_set.sort(key=lambda x: x.fitness)
             #self.inspiring_set = new_gen
             fittest_poem = self.inspiring_set[-1]
+
+            best_fitness = fittest_poem.fitness
             print("ITERATION: " + str(num_iteration + 1) +
-                "\nFittest poem title:\n" +  str(self.inspiring_set[-1].title) +
-                "\nPoem: " +
-                str(self.inspiring_set[-1]) +
-                "\nFitness: " + \
-                str(self.inspiring_set[-1].get_fitness(self.target_mood,\
-                     self.weather)))
-                     
+                "\nFittest poem title:\n" +  str(self.inspiring_set[-1].title))
+                      
             split_best = fittest_poem.split_poem_in_pairs(self.target_mood,\
                  self.weather)
-            
             #we need 5 LINES from split_best , so worst case 5 selections
             split_best = reversed(split_best[-5:])
             split_dict = dict(split_best)
@@ -188,9 +204,7 @@ class GeneticAlgorithm:
                         break
 
             final = Poem(final_poem_lines)
-            print("final\n", final)
             if final.title:
-                print("titled")
                 #os stuff;\
                 # https://www.pythontutorial.net/python-basics/python-check-if-file-exists/
                 if os.path.exists("generated_poems/"+final.title + ".txt"):
@@ -208,9 +222,27 @@ class GeneticAlgorithm:
                     str(num_iteration) + ".txt", "w") as file:
                     file.write(final.text)
 
+            final_fitness = final.get_fitness(self.target_mood, self.weather)
+
+            #add to stats sheet
+            with open("stats/stats" + self.stats +".txt", "a") as f:
+                w_str =  "Iteration\n" + str(num_iteration) + "\nPoem fitness\n" +\
+                     str(best_fitness) + "\nfinal version fitness\n" + \
+                        str(final_fitness)  + "\n"
+                f.write(w_str)
+
+            #flamenca inspiration improvement/lack of improvement
+
             num_iteration += 1
 
     def mutate_synonym_noun(self,poem):
+        """
+        Mutates in synonyms of a chosen noun into a poem.
+        Tries to pick a meaningful noun and if not defaults to random.
+        Param:
+            poem (Poem to be mutated)
+        
+        """
         if poem.title != "":
             noun = random.choice(poem.title.split(" "))
         else:
@@ -231,7 +263,7 @@ class GeneticAlgorithm:
 
         if len(syns) == 0:
             return 
-        #choose a random word??
+        #choose a random word
         syn = random.choice(syns)
         syn_pos = nltk.pos_tag(nltk.word_tokenize(syn))
 
@@ -242,7 +274,6 @@ class GeneticAlgorithm:
                     token_index = line.tokens.index(token)
                     line.tags[token_index] = syn_pos
                     line.tokens[token_index] = syn
-                    
                     line.update_text(noun, syn)
         
         #$update poem fitness, text
@@ -250,6 +281,15 @@ class GeneticAlgorithm:
         poem.update_poem_text()
     
     def find_synonym_verb(self, poem):
+        """
+        Finds verbs in poems as well as synonym options for substitution.
+        Param:
+            poem (Poem to be mutated)
+        
+        return Options,dict  in form:
+            line num: [verb_choice, synonym, "<POS TAG>"]
+        
+        """
         l = 0
         options = {}
         for line in poem.lines:
@@ -273,7 +313,8 @@ class GeneticAlgorithm:
             except ValueError:
                 tag_index3 = -1
 
-
+            
+            #first we try for VBP
             if tag_index != -1 :
                 verbs = poem.w_ex.get_synonyms(line.tags[tag_index][0])
                 iters = 0
@@ -284,7 +325,8 @@ class GeneticAlgorithm:
                         options[l] = [verb, vbp, "VBP"]
                         break
                     iters += 1
-                
+            
+            #then VDB
             if tag_index3 != -1:
                 verbs2 = poem.w_ex.get_synonyms(line.tags[tag_index3][0])
                 iters = 0
@@ -296,6 +338,7 @@ class GeneticAlgorithm:
                         break
                     iters += 1
                
+            #finally VBZ
             if tag_index2 != -1:
                 verbs3 = poem.w_ex.get_synonyms(line.tags[tag_index2][0])
                 iters = 0
@@ -312,13 +355,18 @@ class GeneticAlgorithm:
         return options
     
     def mutate_synonym_verbs(self, poem, options):
+        """
+        Mutates in synonyms of a verb into a poem.
+        Param:
+            poem (Poem to be mutated)
+            options (dict of verb options from find_synonym_verb)
+
+        """
         valid_options = []
         for k,v in options.items():
             if v != []:
                 valid_options.append((k,v))
-        #while verb[1] == []:
-           # verb = random.choice(options)
-        
+       #enforce validity by making sure all necessary info is provided 
         if valid_options:
             verb = random.choice(valid_options)
             line_index = verb[0]
@@ -337,18 +385,3 @@ class GeneticAlgorithm:
             #$update poem fitness, text
             poem.update_fitness(self.target_mood, self.weather)
             poem.update_poem_text()
-
-        
-
-        
-    
-
-
-#def main():
-    #ga = GeneticAlgorithm(15, "Dallas")
-    #rint("Target mood for city is ",ga.target_mood, ga.weather
-     
-   #ga.run()
-    
-
-#main()

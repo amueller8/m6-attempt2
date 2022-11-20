@@ -3,13 +3,23 @@ import glob
 import os, os.path
 from gtts import gTTS
 
-#mkae/run ga
+"""
+Name: Abby
+CSCI 3725
+M6 Poetry Slam
+11/20/22
 
+
+File creates and runs an instance of a genetic algorithm,
+then presents the top 3 most recent results 
+"""
 
 def main():
  
     ga = GeneticAlgorithm(15, "Dallas")
     print("Target mood for city is ",ga.target_mood, ga.weather)
+    stats = input("please give a title for stats file")
+    ga.stats = stats
      
     ga.run()
 
