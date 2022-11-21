@@ -1,5 +1,6 @@
 # *Clima*tic - A weather inspired poetry generator
-<br>
+
+
 ## What is *clima*tic?
 
 Climatic seeks to create poetry based off weather/temperature of a given city.
@@ -28,11 +29,11 @@ class API_Key():
  ### Analyzing Data
  To analyze any poetry data, call `python3 analyze_stats.py` and then type the stats file you would like to graph.
  
- ###Viewing poems
+ ### Viewing poems
  Every poem created along the way is saved into the generated_poems file, so you can see any poem later!
  Poems are named by their "core nouns" and if poems have the same core nouns they are given the iteration/generation number at the end.
 
-#How I challenged myself as a computer scientist
+# How I challenged myself as a computer scientist
 
 This was a challenging project for me, in terms of coming up with ideas and also coming up with ideas of proper scope.
 I had thought about doing Spanish poetry generation and ended up with this poetry that is more loosely inspired-- this was a lesson in how complex the poetry problem is!
