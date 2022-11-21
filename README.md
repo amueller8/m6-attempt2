@@ -31,11 +31,15 @@ class API_Key():
  ### Analyzing Data
  To analyze any poetry data, call `python3 analyze_stats.py` and then type the stats file you would like to graph.
  
- Sample graphs:
+ **Sample graphs**
+
+ <center>
+     <div style="width:50%; background-color:gray";>
  ![plot11102](https://user-images.githubusercontent.com/68559641/203139990-e32e206e-26c3-4b80-9adb-a8550af288bd.png)
  ![plot3095](https://user-images.githubusercontent.com/68559641/203140023-6848348b-f263-4a61-a72c-d33c4a75415d.png)
 ![plot36094](https://user-images.githubusercontent.com/68559641/203140061-61368b9c-5a5a-4055-9c69-55793ef673e7.png)
-
+    </div>
+<center>
 
  
  ### Viewing poems
