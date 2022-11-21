@@ -31,6 +31,13 @@ class API_Key():
  ### Analyzing Data
  To analyze any poetry data, call `python3 analyze_stats.py` and then type the stats file you would like to graph.
  
+ Sample graphs:
+ ![plot11102](https://user-images.githubusercontent.com/68559641/203139990-e32e206e-26c3-4b80-9adb-a8550af288bd.png)
+ ![plot3095](https://user-images.githubusercontent.com/68559641/203140023-6848348b-f263-4a61-a72c-d33c4a75415d.png)
+![plot36094](https://user-images.githubusercontent.com/68559641/203140061-61368b9c-5a5a-4055-9c69-55793ef673e7.png)
+
+
+ 
  ### Viewing poems
  Every poem created along the way is saved into the generated_poems file, so you can see any poem later!
  Poems are named by their "core nouns" and if poems have the same core nouns they are given the iteration/generation number at the end.
