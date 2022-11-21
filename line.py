@@ -26,6 +26,12 @@ class Line:
     """
 
     def update_text(self, old_word, new_word):
+        """
+        Updates line input text.
+        Param:
+            old_word, word to be replaced
+            new_word, replacement word/token (if tokenized and 2 words, splits)
+        """
         #if new word has _, change it
         start = self.input.find(old_word)
         new_word = new_word.split("_")
@@ -42,6 +48,10 @@ class Line:
             self.input = self.input[0:start] + new_w_str + self.input[start+len(old_word):]
     
     def count_syllables_in_line(self):
+        """
+        Counts syllables in a line.
+        There is a duplicate method in f_ex.
+        """
         num_syllables = 0
         for word in self.tokens:
             pronunciation_list = pronouncing.phones_for_word(word)
@@ -54,6 +64,9 @@ class Line:
         return num_syllables
 
     def split_line_in_half(self):
+        """
+        Splits line in half. Similar method in f_ex.
+        """
         og_line = self
         words = og_line.input.strip().split(" ")
         
@@ -66,16 +79,29 @@ class Line:
         return Line(part_1), Line(part_2)
     
     def remove_word(self, word):
+        """
+        Remove_word takes out a given word.
+        This mutation was taken out of final version bc I needed more time.
+        """
         new_line = self.input.replace(word, "")
 
 
     def get_input(self):
+        """
+        Gives line input.
+        """
         return self.input
     
     def get_tokens(self):
+        """
+        Getter for tokens.
+        """
         return self.tokens
 
     def get_tags(self):
+        """
+        Getter for tags.
+        """
         return self.tags
         
     def __str__(self):
@@ -83,5 +109,4 @@ class Line:
     
     def __repr__(self):
         return "Line({0})".format(self.get_input())
-        
         

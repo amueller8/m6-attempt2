@@ -1,0 +1,180 @@
+Iteration
+0
+Poem fitness
+46.49683509161577
+final version fitness
+9.28
+Iteration
+1
+Poem fitness
+53.28770053475936
+final version fitness
+8.643130434782607
+Iteration
+2
+Poem fitness
+53.28770053475936
+final version fitness
+8.643130434782607
+Iteration
+3
+Poem fitness
+53.28770053475936
+final version fitness
+8.624381778741864
+Iteration
+4
+Poem fitness
+65.54255156608099
+final version fitness
+15.639387308533916
+Iteration
+5
+Poem fitness
+65.54255156608099
+final version fitness
+15.639387308533916
+Iteration
+6
+Poem fitness
+67.1234521575985
+final version fitness
+16.004966740576496
+Iteration
+7
+Poem fitness
+67.1234521575985
+final version fitness
+7.729
+Iteration
+8
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+9
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+10
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+11
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+12
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+13
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+14
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+15
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+16
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+17
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+18
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+19
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+20
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+21
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+22
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+23
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+24
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+25
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+26
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+27
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+28
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477
+Iteration
+29
+Poem fitness
+82.7081436210848
+final version fitness
+10.423218997361477

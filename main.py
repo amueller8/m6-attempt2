@@ -16,10 +16,15 @@ Saves the file to an mp3 format and reads aloud.
 """
 
 def main():
+    """
+    Creates GA and seeks input for stats file title as well as which poem is
+    read at the end.
+    """
  
     ga = GeneticAlgorithm(15, "Dallas")
-    print("Target mood for city is ",ga.target_mood, ga.weather)
-    stats = input("please give a title for stats file")
+    print("Target mood for" + str(ga.city) + " is ",ga.target_mood, "Weather is", ga.weather)
+    stats = input("please give a title for stats file "+
+     "(will have the word stats appended to front): ")
     ga.stats = stats
      
     ga.run()

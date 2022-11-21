@@ -8,6 +8,10 @@ import random
 
 class Poem:
     def __init__(self, lines):
+        """
+        Creates poem, with a sentiment analyzer, word/formatting experts
+        as well as text and line object array and weathers for fitness
+        """
         self.lines = lines
         self.sia = SentimentIntensityAnalyzer()
         self.w_ex = WordExpert()
@@ -16,8 +20,7 @@ class Poem:
         for line in self.lines:
                 self.text += line.input + "\n"
         self.sentiment = self.analyze_sentiment()
-        
-        #self.nlp = spacy.load("en_core_web_sm")
+    
         
         self.api_weather_options = ["thunderstorm", "drizzle", "rain",
             "snow", "clouds", "mist", "smoke","haze","dust","fog",
@@ -42,17 +45,22 @@ class Poem:
 
     
     def analyze_sentiment(self):
+        """
+        Sentiment getter.
+        Return: sentiment (float) between -1 and 1
+        """
         sentiment = self.sia.polarity_scores(self.text)['compound']
         return sentiment 
     
 
     def update_poem_text(self):
+        """
+        Based on lines array updates poem text.
+        """
         self.text = ""
         for line in self.lines:
                 self.text += line.input + "\n"
-        
-        #update fitness too?
-        #self.fitness = self.get_fitness(target, weather)
+
     
     def get_fitness(self, target, weather):
         """
@@ -70,20 +78,17 @@ class Poem:
             if word in synonyms or word in self.api_weather_options or \
                 word in self.other_weather_options:
                 weather_words += 1
-                #may make the boost for a weather word much bigger like 5
-            #make a list of weather words (like the options from API)
-            #including sun, sunshine, etc
  
-        #composite fitness: we will subtract sentiment scores from 1, 
-        #so smaller --> bigger
-        sent_decimal = 1 - sent_fitness
+        #composite fitness: we will subtract target- sentiment scores from 1, 
+        #so closer match to target is rewarded
+        sent_decimal = 1 - abs(target - sent_fitness)
         if weather_words != 0:
             combined_fitness = sent_decimal * weather_words
         else: 
             combined_fitness = sent_decimal
 
         #aesthetic: targeting ~6 syllable lines
-        avg_syllables = self.f_ex.get_avg_line_length(self)
+        avg_syllables = self.f_ex.get_avg_syllables(self)
         
         #subtle rewards and punishment for line length 
         if avg_syllables == 6:
@@ -99,25 +104,30 @@ class Poem:
             self.fitness = combined_fitness * 10
         return combined_fitness * 10
 
-    def fittest_lines(self, target_mood, weather, num_lines=5):
-        top_5 = {}
+    def fittest_lines(self, target_mood, weather):
+        """
+        Finds the fittest line based on params:
+        Param
+            target_mood, float mood.
+            weather, array of waether
+
+        return
+            lines sorted by fitness, ascending.
+        """
+        top_5 = {} #named top_5 bc it used to only return 5 lines. lies.
         for l in range(len(self.lines)):
             p = Poem([self.lines[l]])
             p.get_fitness(target_mood, weather)
-            #print(p.fitness)
             top_5[l] = p.fitness
         sort_list = (sorted(top_5.items(), key=lambda item: item[1]))
-        print("hi")
-        print(sort_list)
-
-        #if len(sort_list) >= num_lines:
-            #new_list = sort_list[-num_lines:]
-            #return list(dict(new_list).keys())
-
+    
         return list(dict(sort_list).keys())
 
 
     def update_fitness(self, target, weather):
+        """
+        Updates fitness attribute based on target and weather.
+        """
         self.fitness = self.get_fitness(target, weather)
     
     def __str__(self):
@@ -127,6 +137,13 @@ class Poem:
         return "Poem({0})".format(self.lines)
 
     def split_poem_in_pairs(self, target, weather):
+        """
+        Splits poem into pairs of lines based on fitnesses
+        and if the poem goes much above 6 syllables.
+        Return:
+            sort_list, an ascending sorted list of poem cut into reduced
+            syllable lines.
+        """
         linez = []
         pairs = []
         index = 0
@@ -142,6 +159,7 @@ class Poem:
         
         new_p = Poem(linez)
         fitnesses = []
+        #get the fitnesses to sort the new lines by fitness
         for i in range(len(new_p.lines)):
             if i in pairs and i+1 in pairs and i+1 < len(new_p.lines):
                 g_fit = Poem([new_p.lines[i], new_p.lines[i+1]])
@@ -152,52 +170,6 @@ class Poem:
                 g_fit = Poem([new_p.lines[i]])
                 g_fit.get_fitness(target, weather)
                 fitnesses.append((g_fit.fitness, g_fit))
-        #print("POEM BY FITNESSES",fitnesses)
+
         sort_list = (sorted(dict(fitnesses).items(), key=lambda item: item[0]))
-        #print("HERE IS SORTLIST\n",sort_list)
         return sort_list
-
-def main():
-    l = Line("Roses are terrible")
-    l2 = Line("Violets are awful and blue")
-    l3 = Line("Sugar is blown away in rain")
-    l4 = Line("And so are")
-    l5 = Line("choppy choppy yay the storm hurricane wind")
-    l6 = Line("Thank you, thank you, unpaid labor")
-
-    p = Poem([l,l2,l3,l4,l5, l6])
-    #print(p.fittest_lines())
-
-    linz = []
-    pairs = []
-    index = 0
-    for l in p.lines:
-        
-        if l.count_syllables_in_line() > 6:
-            l1, l2 = p.f_ex.split_line_in_half(l)
-            linz.append(l1)
-            linz.append(l2)
-            pairs.append(index)
-            pairs.append(index + 1)
-            index += 1
-        index += 1
-        
-    new_p = Poem(linz)
-    fitnesses = []
-    
-    for i in range(len(new_p.lines)):
-        if i in pairs and i+1 in pairs and i+1 < len(new_p.lines) and i < len(new_p.lines) :
-            g_fit = Poem([new_p.lines[i], new_p.lines[i+1]])
-            g_fit.get_fitness(0.6, [41.0, "Cloudy"])
-            fitnesses.append((g_fit.fitness, g_fit))
-            i += 1
-        else:
-            g_fit = Poem([new_p.lines[i]])
-            g_fit.get_fitness(0.6, [41.0, "Cloudy"])
-            fitnesses.append((g_fit.fitness, g_fit))
-
-    print(fitnesses)
-    print(new_p)
-    
-  
-#main()

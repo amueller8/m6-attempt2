@@ -22,6 +22,14 @@ M6 Poetry Slam
 File sets up a genetic algorithm to create
 weather inspired poems partly informed by the flamenca 
 spanish poetry style.
+
+Main functions:
+
+run, selection, recombination.
+mutate_synonym_noun, mutate_synonym_verb, as well as find_synonym_verb
+
+Notes: exceeds line length limit in 2 places to allow for mlconjug3 
+conjugation indexing (needs like 3 [][][] indicies in a row)
 """
 class GeneticAlgorithm:
 
@@ -37,6 +45,7 @@ class GeneticAlgorithm:
         self.iterations = iterations
         self.inspiring_set = []
         self.stats = str(datetime.date.today())
+        self.city = city_name
         
         
         self.weather_call = WeatherCall()
@@ -90,8 +99,8 @@ class GeneticAlgorithm:
             count = 0
             random_number = random.randint(0,total)
             for z in range(len(self.inspiring_set)):
-                count += int(self.inspiring_set[z].get_fitness(self.target_mood,\
-                 self.weather))
+                count += int(self.inspiring_set[z].get_fitness(\
+                    self.target_mood, self.weather))
                 if random_number <= count:
                     selected_poems.append(self.inspiring_set[z])
                     break
@@ -109,8 +118,8 @@ class GeneticAlgorithm:
         """
         new_poems = []
         for i in range(0, len(selected_poems), 2):
-            if selected_poems[i].get_fitness(self.target_mood, self.weather) < \
-                    selected_poems[i + 1].get_fitness(self.target_mood, \
+            if selected_poems[i].get_fitness(self.target_mood, self.weather) \
+                < selected_poems[i + 1].get_fitness(self.target_mood, \
                         self.weather):
                 random_index = random.randint(0, int(
                     selected_poems[i].get_fitness(self.target_mood, \
@@ -206,7 +215,8 @@ class GeneticAlgorithm:
             final = Poem(final_poem_lines)
             if final.title:
                 #os stuff;\
-                # https://www.pythontutorial.net/python-basics/python-check-if-file-exists/
+                # https://www.pythontutorial.net/python-basics/\
+                # python-check-if-file-exists/
                 if os.path.exists("generated_poems/"+final.title + ".txt"):
                     with open("generated_poems/"+final.title + \
                         str(num_iteration) + ".txt", "w") as file:
@@ -226,12 +236,11 @@ class GeneticAlgorithm:
 
             #add to stats sheet
             with open("stats/stats" + self.stats +".txt", "a") as f:
-                w_str =  "Iteration\n" + str(num_iteration) + "\nPoem fitness\n" +\
+                w_str =  "Iteration\n" + str(num_iteration) + \
+                    "\nPoem fitness\n" +\
                      str(best_fitness) + "\nfinal version fitness\n" + \
                         str(final_fitness)  + "\n"
                 f.write(w_str)
-
-            #flamenca inspiration improvement/lack of improvement
 
             num_iteration += 1
 

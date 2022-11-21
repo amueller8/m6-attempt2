@@ -20,14 +20,14 @@ def analyze():
     with open("stats/" + filename) as f:
         data = f.readlines()
         x = [line.split("\n") for line in data]
-        print(x)
+        #print(x)
         #0, 1, 2 = iteration, poem, final
         
         iters = []
         poem = []
         final = []
         even = x[1::2]
-        print(even)
+        #print(even)
         for i in range(0, len(even), 3):
             iters.append(int(even[i][0]))
             poem.append(float(even[i+1][0]))
@@ -47,9 +47,12 @@ def analyze():
         plt.ylim = max(max(poem), max(final))
         plt.plot(*zip(*poem_tuples))
         plt.plot(*zip(*final_tuples))
+        plt.savefig('stats/plots/plot' + str(random.randint(0, 40000)) + '.png')
+
         plt.show()
 
-        plt.savefig('stats/plot' + str(random.randint(0, 40000)) + '.png')
+        #https://chartio.com/resources/tutorials/how-to-save-a-plot-to-a-file-using-matplotlib/
+        #plt.savefig('stats/plots/plot' + str(random.randint(0, 40000)) + '.png')
 
         
 def main():
