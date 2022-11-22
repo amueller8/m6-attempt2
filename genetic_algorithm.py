@@ -212,6 +212,9 @@ class GeneticAlgorithm:
                         break
 
             final = Poem(final_poem_lines)
+            final_sentiment = final.sentiment
+            print("Delta from target mood is": abs(final_sentiment -\
+                 self.target_mood))
             if final.title:
                 #os stuff;\
                 # https://www.pythontutorial.net/python-basics/\
