@@ -36,6 +36,7 @@ class API_Key():
  
  ### Analyzing Data
  To analyze any poetry data, call `python3 analyze_stats.py` and then type the stats file you would like to graph.
+ Another evaluation metric is the delta from the target mood (delta closer to 0 means the poem is supposed to have a sentiment closer to the target mood).
  
  **Sample graphs**
 
