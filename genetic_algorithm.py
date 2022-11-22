@@ -182,7 +182,6 @@ class GeneticAlgorithm:
         
             # Iteration print statements
             self.inspiring_set.sort(key=lambda x: x.fitness)
-            #self.inspiring_set = new_gen
             fittest_poem = self.inspiring_set[-1]
 
             best_fitness = fittest_poem.fitness
@@ -285,7 +284,7 @@ class GeneticAlgorithm:
                     line.tokens[token_index] = syn
                     line.update_text(noun, syn)
         
-        #$update poem fitness, text
+        #update poem fitness, text
         poem.update_fitness(self.target_mood, self.weather)
         poem.update_poem_text()
     

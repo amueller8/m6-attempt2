@@ -20,8 +20,9 @@ def main():
     Creates GA and seeks input for stats file title as well as which poem is
     read at the end.
     """
+    city = input("Which city would you like to use?")
  
-    ga = GeneticAlgorithm(15, "Dallas")
+    ga = GeneticAlgorithm(15, city)
     print("Target mood for" + str(ga.city) + " is ",ga.target_mood, "Weather is", ga.weather)
     stats = input("please give a title for stats file "+
      "(will have the word stats appended to front): ")
