@@ -39,15 +39,11 @@ class API_Key():
  
  **Sample graphs**
 
-
- <div style = "text-align: center">
      
-      <p>   
+    
  ![plot11102](https://user-images.githubusercontent.com/68559641/203139990-e32e206e-26c3-4b80-9adb-a8550af288bd.png)
  ![plot3095](https://user-images.githubusercontent.com/68559641/203140023-6848348b-f263-4a61-a72c-d33c4a75415d.png)
 ![plot36094](https://user-images.githubusercontent.com/68559641/203140061-61368b9c-5a5a-4055-9c69-55793ef673e7.png)
-    </p>
-</div>
 
 
  
@@ -66,7 +62,7 @@ I used many new things:
 <li>used matplot lib for the first time for graphing fitness stats</li>
 <li>utilized the pronouncing libraries and nltk POS tagging, as well as conjugation modules that lacked much documentation </li>
 <li>OpenWeather API </li>
-
+</ul>
 I didn't give up on the project, but I had to adjust my sights to what was realistic in a given timeframe (especially regarding how many new things I learned and used). That was harder than I expected!
  
  In a further expansion I'd love to incorporate more of a rule-set or grammar, because sometimes the poems end up semantically confusing partly due to some more fanciful poetry in the inspiring set and largely due to the way crossover and line selection by fitness occurs.
@@ -75,7 +71,7 @@ I didn't give up on the project, but I had to adjust my sights to what was reali
 
 In terms of developing a human connection and situating the poetry in a place/waether, I was inspired by [full FACE](https://www.yumpu.com/en/document/read/19102975/full-face-poetry-generation-computational-creativity). 
 In terms of the idea of having "experts" that specialized in different tasks, and identifying fittest lines (inspired by the idea of a "most inpsiring line in the paper), [this paper "Poetry Generation System with an Emotional Personality](https://www.researchgate.net/publication/274249704_Poetry_Generation_System_With_an_Emotional_Personality) helped guide me.
-Also, I was loosely inspired to "bias the generation of verses according to a combination of different scoring functions" by [this paper](https://computationalcreativity.net/iccc21/wp-content/uploads/2021/09/ICCC_2021_paper_31.pdf) although I don't consider nearly as many complexities as the author. 
+Also, I was loosely inspired to "bias the generation of verses according to a combination of different scoring functions" by [this paper](https://computationalcreativity.net/iccc21/wp-content/uploads/2021/09/ICCC_2021_paper_31.pdf) although I don't consider nearly as many complexities as the author. This paper also went fully into syllable generation with far more complex methods than I implemented but was a cool read.
     
  
 
