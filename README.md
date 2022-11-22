@@ -87,4 +87,7 @@ Also, I was loosely inspired to "bias the generation of verses according to a co
 [Finding possible verbs to substitute](https://www.reddit.com/r/LanguageTechnology/comments/egh7jk/how_to_check_if_a_word_can_be_interpreted_as_a/)</br>
 [See if a file exists already](https://www.pythontutorial.net/python-basics/python-check-if-file-exists/)
 [Sample using mlconjug3 in english (documentation is mainly french examples)](https://github.com/tyxchen/bad-excuses-for-zoom-abuses/blob/master/excuses.py) 
-   
+[matplotlib help](https://stackoverflow.com/questions/18458734/how-do-i-plot-list-of-tuples-in-python)
+[OpenWeatherAPI help](https://www.tutorialspoint.com/find-current-weather-of-any-city-using-openweathermap-api-in-python)
+[More openweather API stuff](https://geekyhumans.com/get-weather-information-using-python/)
+OpenWeatherAPI documentation on website too

@@ -3,6 +3,14 @@ import pronouncing
 #nltk.download('punkt')
 #nltk.download('averaged_perceptron_tagger')
 
+
+"""
+Abby
+CSC3725
+11/21/22
+Line class with updating and syllable counting methods.
+
+"""
 class Line:
 
     def __init__(self, input):

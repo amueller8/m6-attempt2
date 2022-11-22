@@ -159,7 +159,7 @@ class GeneticAlgorithm:
             for poem in self.inspiring_set:
                 old_fitness = poem.get_fitness(self.target_mood, self.weather)
                 probability = random.randint(0, 100)
-                if probability < 60:
+                if probability < 50:
                     mutation_choice = random.randint(1, 2)
                    
                     if mutation_choice == 1:

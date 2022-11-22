@@ -6,6 +6,17 @@ from formatting_expert import FormattingExpert
 from line import Line
 import random
 
+"""
+Abby
+CSCI3725
+11/21/22
+
+
+Poem object class with init method and key methods including
+fitness getter/update, text updating, and poem 
+splitting functions to reduce line lengths.
+"""
+
 class Poem:
     def __init__(self, lines):
         """

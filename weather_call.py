@@ -4,6 +4,14 @@ import requests, json
 """
 Abby Mueller
 
+CSCI3725
+11/21/22
+
+
+This file handles the OpenWeatherApi calls for a given city.
+
+
+Help was found in:
 https://www.tutorialspoint.com/\
     find-current-weather-of-any-city-using-openweathermap-api-in-python
 #https://geekyhumans.com/get-weather-information-using-python/ 
@@ -20,6 +28,13 @@ class WeatherCall():
         ]
 
     def query_city_for_weather(self,city, state=""):
+        """
+        Queries API for waether for a city.
+        Gets a json response, converts temp to F, and gives main
+        weather classification.
+        Returns
+            array of temp and weather
+        """
         if state != "":
             state = ","+state
         base_url = "https://api.openweathermap.org/data/2.5/weather?"
@@ -41,6 +56,9 @@ class WeatherCall():
             return [curr_temp, weather]
 
     def determine_weather_sentiment(self,temp_weather_list):
+        """
+        Gets "sentiment" of given tempertures.
+        """
         temp = temp_weather_list[0]
         weather = temp_weather_list[0]
 
@@ -75,12 +93,6 @@ class WeatherCall():
             return -0.6
         else:
             print(-1)
-
-        #weather to sentiment later (add weather to top,)
-        weather_options= ["thunderstorm", "drizzle", "rain",
-            "snow", "clouds", "mist", "smoke","haze","dust","fog",
-            "sand", "ash", "squall", "tornado", "clear", "extreme"
-        ]
 
         
 
